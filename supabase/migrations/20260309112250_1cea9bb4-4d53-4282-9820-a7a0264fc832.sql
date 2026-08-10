@@ -1,0 +1,1 @@
+UPDATE public.ciclos SET intervalo_dias = 29 WHERE intervalo_dias = 30 AND status = 'ativo';

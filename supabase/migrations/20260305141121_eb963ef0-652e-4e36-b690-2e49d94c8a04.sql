@@ -1,0 +1,2 @@
+ALTER TABLE public.documentos DROP CONSTRAINT documentos_tipo_check;
+ALTER TABLE public.documentos ADD CONSTRAINT documentos_tipo_check CHECK (tipo = ANY (ARRAY['paciente'::text, 'representante'::text, 'procuracao'::text, 'identidade'::text, 'doc_representante'::text, 'cupom_fiscal'::text, 'receita'::text]));
