@@ -66,7 +66,6 @@ function buildReminderMessage(alert: Omit<AlertItem, "mensagem">) {
     alert.ultimaPossivel ? "Depois desta retirada, será necessário renovar a receita." : null,
     alert.usaRepresentante ? "Se a retirada for por representante, leve a procuração e o documento do representante." : null,
     "",
-    "Farmácia Cantagalo",
   ]
     .filter(Boolean)
     .join("\n");

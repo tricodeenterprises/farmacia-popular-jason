@@ -1,7 +1,7 @@
 import { useAuth } from "@/hooks/useAuth";
 import { useNavigate, useLocation } from "react-router-dom";
 import { motion } from "framer-motion";
-import logoFarmacia from "@/assets/logo-farmacia.jpg";
+import logoFarmacia from "@/assets/logo-sistema.png";
 import {
   ArrowLeft,
   BarChart3,
@@ -106,7 +106,7 @@ export default function AppLayout({ children, title }: Props) {
             <img src={logoFarmacia} alt="Logo" className="h-10 w-10 shrink-0 rounded-xl object-cover ring-1 ring-border" />
 
             <div className="min-w-0 flex-1">
-              <h1 className="truncate text-base font-black leading-tight text-foreground">{title || "Farmácia Popular"}</h1>
+              <h1 className="truncate text-base font-black leading-tight text-foreground">{title || "Sistema"}</h1>
               <p className="truncate text-xs text-muted-foreground">{profile?.nome || "Usuário"} • {userRole}</p>
             </div>
 

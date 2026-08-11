@@ -111,7 +111,7 @@ function printRows(title: string, rows: ReportRow[]) {
     th, td { border: 1px solid #cbd5e1; padding: 6px; vertical-align: top; }
     tr:nth-child(even) td { background: #f8fafc; }
     span { color: #64748b; font-size: 10px; }
-  </style></head><body><h1>Farmácia Cantagalo — ${escapeHtml(title)}</h1><div class="meta">Total: ${rows.length} · Emitido em ${formatDateBR(getTodayStr())}</div><table><thead><tr><th>#</th><th>Cliente</th><th>Status</th><th>Tipo</th><th>Detalhe</th></tr></thead><tbody>${body}</tbody></table></body></html>`;
+  </style></head><body><h1>Sistema — ${escapeHtml(title)}</h1><div class="meta">Total: ${rows.length} · Emitido em ${formatDateBR(getTodayStr())}</div><table><thead><tr><th>#</th><th>Cliente</th><th>Status</th><th>Tipo</th><th>Detalhe</th></tr></thead><tbody>${body}</tbody></table></body></html>`;
 
   const w = window.open("", "_blank", "width=900,height=720");
   if (!w) return false;

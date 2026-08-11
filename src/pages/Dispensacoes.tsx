@@ -55,7 +55,7 @@ function buildClientMessage(args: {
   return [
     `Prezado(a) Senhor(a), ${primeiroNome}.`,
     "",
-    "Sua dispensação foi registrada na Farmácia Cantagalo.",
+    "Sua dispensação foi registrada no sistema.",
     `Retirada: ${formatDateBR(args.dataRetirada)}`,
     args.proximaRetirada ? `Próxima retirada: ${formatDateBR(args.proximaRetirada)}` : null,
     args.ultimaPossivel && args.validadeAte
@@ -63,7 +63,6 @@ function buildClientMessage(args: {
       : null,
     args.ultimaPossivel ? "Para continuar, será necessário renovar a receita." : null,
     "",
-    "Farmácia Cantagalo",
   ]
     .filter(Boolean)
     .join("\n");

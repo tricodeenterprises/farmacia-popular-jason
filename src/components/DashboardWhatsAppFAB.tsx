@@ -82,7 +82,7 @@ function buildMessage(nome: string, tipo: Tipo, proxima: string, diasAtraso?: nu
     if (isDomingo) {
       linhas.push("Como não funcionamos aos domingos, pedimos a gentileza de comparecer no *próximo dia útil*.");
     } else {
-      linhas.push("Aguardamos sua presença na Farmácia Cantagalo.");
+      linhas.push("Aguardamos sua presença.");
     }
     return linhas.join("\n") + avisoUltima;
   }
@@ -91,7 +91,7 @@ function buildMessage(nome: string, tipo: Tipo, proxima: string, diasAtraso?: nu
       `Prezado(a) Senhor(a), *${primeiro}*.`,
       "",
       `Sua retirada já está disponível *hoje, ${formatDateBR(proxima)}*.`,
-      "Quando puder, compareça à Farmácia Cantagalo.",
+      "Tenha um ótimo dia!",
     ].join("\n") + avisoUltima;
   }
   const isUltimo = proximoNumero === MAX_ATRASO_SENDS;
@@ -106,7 +106,7 @@ function buildMessage(nome: string, tipo: Tipo, proxima: string, diasAtraso?: nu
       "Este é o *último aviso*: caso não haja retirada, o ciclo será encerrado e será necessário apresentar nova receita para reabertura.",
     );
   } else {
-    linhas.push("Assim que possível, compareça à Farmácia Cantagalo para dar continuidade ao seu tratamento.");
+    linhas.push("Assim que possível, venha para dar continuidade ao seu tratamento.");
   }
   return linhas.join("\n") + avisoUltima;
 }

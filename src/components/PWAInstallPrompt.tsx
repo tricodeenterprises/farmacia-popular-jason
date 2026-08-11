@@ -112,11 +112,11 @@ export function PWAInstallPrompt() {
           </button>
           <img
             src="/pwa-icon-192.png"
-            alt="Farmácia Cantagalo"
+            alt="sistema"
             className="w-20 h-20 rounded-2xl mx-auto mb-3 shadow-lg border-2 border-white/20"
           />
           <h2 className="text-xl font-bold text-white font-[var(--font-display)]">
-            Farmácia Cantagalo
+            Sistema
           </h2>
           <p className="text-white/80 text-sm mt-1">
             Instale nosso app para acesso rápido!

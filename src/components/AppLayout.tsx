@@ -2,7 +2,7 @@ import type { ElementType, ReactNode } from "react";
 import { useMemo, useState } from "react";
 import { useAuth } from "@/hooks/useAuth";
 import { useLocation, useNavigate } from "react-router-dom";
-import logoFarmacia from "@/assets/logo-farmacia.jpg";
+import logoFarmacia from "@/assets/logo-sistema.png";
 import {
   BarChart3,
   ClipboardList,
@@ -210,7 +210,7 @@ export default function AppLayout({ children, title }: Props) {
                 <img src={logoFarmacia} alt="Logo" className="h-full w-full object-cover" />
               </span>
               <span className="min-w-0">
-                <span className="block truncate text-sm font-black">Farmácia Popular</span>
+                <span className="block truncate text-sm font-black">Sistema</span>
                 <span className="block truncate text-xs text-muted-foreground">Sistema de atendimento</span>
               </span>
             </button>

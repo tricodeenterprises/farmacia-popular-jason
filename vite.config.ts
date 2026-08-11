@@ -44,9 +44,9 @@ export default defineConfig(({ mode }) => ({
         ],
       },
       manifest: {
-        name: "Farmácia Cantagalo",
+        name: "Sistema",
         short_name: "Cantagalo",
-        description: "Sistema de gestão da Farmácia Cantagalo - Farmácia Popular",
+        description: "Sistema",
         theme_color: "#cc2222",
         background_color: "#f7f7f7",
         display: "standalone",

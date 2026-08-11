@@ -286,7 +286,6 @@ export default function PacientePanel({ paciente: pacienteProp }: Props) {
       status.label === "RECEITA VENCIDA" ? "A receita atual está vencida. Para continuar, será necessário apresentar uma nova receita." : null,
       status.label === "LIMITE ATINGIDO" ? "Esta foi a última retirada possível com a receita atual. Para continuar, será necessário renovar a receita." : null,
       "",
-      "Farmácia Cantagalo",
     ].filter(Boolean);
     return linhas.join("\n");
   };
@@ -300,11 +299,10 @@ export default function PacientePanel({ paciente: pacienteProp }: Props) {
     return [
       `Olá, ${firstName}.`,
       "",
-      `Sua dispensação de ${tipo} foi registrada na Farmácia Cantagalo.`,
+      `Sua dispensação de ${tipo} foi registrada no Sistema.`,
       dataRetirada ? `Retirada: ${formatDateBR(dataRetirada)}` : null,
       proxima ? `Próxima retirada: ${formatDateBR(proxima)}` : null,
       "",
-      "Farmácia Cantagalo",
     ].filter(Boolean).join("\n");
   };
 

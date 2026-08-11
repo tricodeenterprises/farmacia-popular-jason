@@ -29,7 +29,6 @@ export function buildDispensacaoWhatsAppMessage(params: {
   const linhas: string[] = [
     `Prezado(a) Senhor(a), *${primeiroNome}*.`,
     "",
-    "🏥 *Farmácia Cantagalo*",
     "",
     "Segue o comprovante da sua dispensação:",
     `📅 Retirada: *${formatDateBR(params.dataDispensacao)}*`,

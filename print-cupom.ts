@@ -38,13 +38,12 @@ function buildClientMessage(args: { nome: string; dataRetirada: string; proximaR
   return [
     `Olá, ${primeiroNome}.`,
     "",
-    "Sua dispensação foi registrada na Farmácia Cantagalo.",
+    "Sua dispensação foi registrada no Sistema.",
     `Retirada: ${formatDateBR(args.dataRetirada)}`,
     args.proximaRetirada ? `Próxima retirada: ${formatDateBR(args.proximaRetirada)}` : null,
     args.ultimaPossivel && args.validadeAte ? `Atenção: esta é a última retirada possível com a receita atual, válida até ${formatDateBR(args.validadeAte)}.` : null,
     args.ultimaPossivel ? "Para continuar, será necessário renovar a receita." : null,
     "",
-    "Farmácia Cantagalo",
   ].filter(Boolean).join("\n");
 }
 

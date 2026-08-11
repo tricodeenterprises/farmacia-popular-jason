@@ -1,7 +1,7 @@
 import { supabase } from "@/integrations/supabase/client";
 
 /**
- * Numeração da "pasta popular": cada paciente com pelo menos um ciclo ativo
+ * Numeração da "pasta": cada paciente com pelo menos um ciclo ativo
  * recebe um número sequencial dentro da letra inicial do seu nome.
  *
  * A numeração é derivada do estado atual dos ciclos ativos (ordenada pelo nome),

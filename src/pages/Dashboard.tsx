@@ -245,7 +245,7 @@ export default function Dashboard() {
   const activeAlerts = expiredCycles.filter(c => !dismissedAlerts.has(c.id));
 
   return (
-    <AppLayout title="Farmácia Cantagalo - Popular 🇧🇷">
+    <AppLayout title="Sistema">
       <div className="space-y-6">
 
         {/* ═══ 1. Saudação e contexto ═══ */}

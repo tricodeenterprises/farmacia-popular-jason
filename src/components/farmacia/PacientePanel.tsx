@@ -312,7 +312,6 @@ export default function PacientePanel({ paciente: pacienteProp }: Props) {
         : `Seu atendimento de ${tipo} precisa de atualização na farmácia.`,
       status.label === "ENCERRAMENTO NECESSÁRIO" ? "O ciclo atual precisa ser encerrado. Para continuar, será necessário apresentar ou cadastrar uma nova receita." : null,
       "",
-      "Farmácia Cantagalo",
     ].filter(Boolean);
     return linhas.join("\n");
   };
@@ -326,11 +325,10 @@ export default function PacientePanel({ paciente: pacienteProp }: Props) {
     return [
       `Prezado(a) Senhor(a), ${firstName}.`,
       "",
-      `Sua dispensação de ${tipo} foi registrada na Farmácia Cantagalo.`,
+      `Sua dispensação de ${tipo} foi registrada no sistema.`,
       dataRetirada ? `Retirada: ${formatDateBR(dataRetirada)}` : null,
       proxima ? `Próxima retirada: ${formatDateBR(proxima)}` : null,
       "",
-      "Farmácia Cantagalo",
     ].filter(Boolean).join("\n");
   };
 

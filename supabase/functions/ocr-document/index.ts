@@ -78,7 +78,7 @@ CONTEXTO DO CICLO ATUAL:
 `;
       }
 
-      systemPrompt = `Você é um sistema de OCR e VALIDAÇÃO especializado em cupons fiscais do programa Farmácia Popular do Brasil.
+      systemPrompt = `Você é um sistema de OCR e VALIDAÇÃO especializado em cupons fiscais.
 
 IMPORTANTE — SELEÇÃO DO CUPOM CORRETO:
 - Se a imagem contiver mais de um cupom ou documento, IGNORE qualquer cupom que contenha QR code.

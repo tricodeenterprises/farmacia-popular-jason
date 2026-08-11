@@ -738,7 +738,6 @@ export default function NovaDispensacao({ paciente, ciclo, onClose, galeriaFotos
           `Próxima retirada: ${formatDateBR(proximaRetirada)}.`,
           ultimaPossivel ? "Atenção: esta foi a última retirada possível com a receita atual. Será necessário renovar a receita para continuar." : null,
           "",
-          "Farmácia Cantagalo",
         ].filter(Boolean).join("\n");
         const phone = `55${String(paciente.telefone).replace(/\D/g, "")}`;
         window.open(`https://api.whatsapp.com/send?phone=${phone}&text=${encodeURIComponent(msg)}`, "_blank");

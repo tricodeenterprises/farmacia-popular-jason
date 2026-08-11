@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import logoFarmacia from "@/assets/logo-farmacia.jpg";
+import logoFarmacia from "@/assets/logo-sistema.png";
 import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 import { LogIn, Zap } from "lucide-react";
@@ -82,13 +82,13 @@ export default function Login() {
               }}
               whileHover={{ scale: 1.05, rotate: 2 }}
             >
-              <img src={logoFarmacia} alt="Farmácia Cantagalo" className="w-full h-full object-cover" />
+              <img src={logoFarmacia} alt="sistema" className="w-full h-full object-cover" />
             </motion.div>
             <div>
-              <CardTitle className="text-2xl text-gradient">Farmácia Cantagalo</CardTitle>
+              <CardTitle className="text-2xl text-gradient">Sistema</CardTitle>
               <p className="text-sm text-muted-foreground mt-1 flex items-center justify-center gap-1.5">
                 <Zap className="w-3.5 h-3.5 text-primary" />
-                Sistema Farmácia Popular
+                Sistema
               </p>
             </div>
           </CardHeader>

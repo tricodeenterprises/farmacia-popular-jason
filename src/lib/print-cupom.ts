@@ -108,7 +108,7 @@ function cupomSection(d: PrintDispensacaoData) {
   return `<section class="receipt-page">
     ${pastaHtml}
     <div class="brand">
-      <h1>FARMÁCIA CANTAGALO</h1>
+      <h1>SISTEMA</h1>
       <p>Comprovante de dispensação</p>
     </div>
 
@@ -205,7 +205,7 @@ export function printListaDispensacoes(rows: PrintListaDispensacaoRow[], periodo
     tr:nth-child(even) td { background: #f8fafc; }
     span { color: #64748b; font-size: 10px; }
   </style></head><body>
-    <h1>Farmácia Cantagalo — Lista de dispensações</h1>
+    <h1>Lista de dispensações</h1>
     <div class="meta">Período: ${escapeHtml(periodo)} · Total: ${rows.length} · Emitido em ${formatDateBR(new Date().toISOString().split("T")[0])}</div>
     <table>
       <thead><tr><th>#</th><th>Paciente</th><th>Tipo</th><th>Retirada</th><th>Próxima</th><th>Modo</th><th>Operador</th></tr></thead>
@@ -238,7 +238,7 @@ export function printConferenciaCiclo(ciclo: PrintCicloConferenciaData) {
     .check { font-size: 14px; margin: 6px 0; }
   </style></head><body>
     <h1>Conferência de pacote de receita</h1>
-    <div class="meta">Farmácia Cantagalo · Emitido em ${formatDateBR(new Date().toISOString().split("T")[0])}</div>
+    <div class="meta">Sistema · Emitido em ${formatDateBR(new Date().toISOString().split("T")[0])}</div>
     <div class="grid">
       <div class="box"><div class="label">Paciente</div><div class="value">${escapeHtml(ciclo.pacienteNome)}</div><div>${escapeHtml(ciclo.pacienteCpf || "")}</div></div>
       <div class="box"><div class="label">Tipo</div><div class="value">${escapeHtml(ciclo.tipo)}</div></div>
