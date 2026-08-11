@@ -5,13 +5,52 @@ const corsHeaders = {
   "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type, x-supabase-client-platform, x-supabase-client-platform-version, x-supabase-client-runtime, x-supabase-client-runtime-version",
 };
 
+function inferImageMimeType(base64: string): string {
+  if (base64.startsWith("iVBORw0KGgo")) return "image/png";
+  if (base64.startsWith("UklGR")) return "image/webp";
+  if (base64.startsWith("R0lGOD")) return "image/gif";
+  return "image/jpeg";
+}
+
+function normalizeSchemaForGemini(schema: any): any {
+  if (Array.isArray(schema)) return schema.map(normalizeSchemaForGemini);
+  if (!schema || typeof schema !== "object") return schema;
+
+  const out: Record<string, unknown> = {};
+
+  for (const [key, value] of Object.entries(schema)) {
+    if (key === "nullable" || key === "additionalProperties") continue;
+    out[key] = normalizeSchemaForGemini(value);
+  }
+
+  if (schema.nullable === true && typeof schema.type === "string") {
+    out.type = [schema.type, "null"];
+  }
+
+  return out;
+}
+
 serve(async (req) => {
   if (req.method === "OPTIONS") return new Response(null, { headers: corsHeaders });
 
   try {
     const { imageBase64, tipo, contexto_ciclo } = await req.json();
-    const LOVABLE_API_KEY = Deno.env.get("LOVABLE_API_KEY");
-    if (!LOVABLE_API_KEY) throw new Error("LOVABLE_API_KEY not configured");
+    const GEMINI_API_KEY = Deno.env.get("GEMINI_API_KEY");
+    if (!GEMINI_API_KEY) throw new Error("GEMINI_API_KEY not configured");
+
+    if (!imageBase64 || typeof imageBase64 !== "string") {
+      return new Response(JSON.stringify({ error: "Imagem não informada." }), {
+        status: 400,
+        headers: { ...corsHeaders, "Content-Type": "application/json" },
+      });
+    }
+
+    if (!["documento", "receita", "cupom_fiscal"].includes(tipo)) {
+      return new Response(JSON.stringify({ error: "Tipo de OCR inválido." }), {
+        status: 400,
+        headers: { ...corsHeaders, "Content-Type": "application/json" },
+      });
+    }
 
     const qualityInstructions = `
 
@@ -78,7 +117,7 @@ CONTEXTO DO CICLO ATUAL:
 `;
       }
 
-      systemPrompt = `Você é um sistema de OCR e VALIDAÇÃO especializado em cupons fiscais.
+      systemPrompt = `Você é um sistema de OCR e VALIDAÇÃO especializado em cupons fiscais do programa Farmácia Popular do Brasil.
 
 IMPORTANTE — SELEÇÃO DO CUPOM CORRETO:
 - Se a imagem contiver mais de um cupom ou documento, IGNORE qualquer cupom que contenha QR code.
@@ -241,65 +280,101 @@ Responda APENAS com JSON válido usando a tool fornecida.`;
         },
       },
     ];
-    const toolChoice = tipo === "documento"
-      ? { type: "function", function: { name: "extract_document" } }
-      : tipo === "cupom_fiscal"
-        ? { type: "function", function: { name: "extract_cupom" } }
-        : { type: "function", function: { name: "extract_receita" } };
 
-    const response = await fetch("https://ai.gateway.lovable.dev/v1/chat/completions", {
-      method: "POST",
-      headers: {
-        Authorization: `Bearer ${LOVABLE_API_KEY}`,
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        model: "google/gemini-2.5-flash",
-        messages: [
-          { role: "system", content: systemPrompt },
-          {
-            role: "user",
-            content: [
-              { type: "text", text: "Extraia os dados deste documento e avalie a qualidade da imagem." },
-              { type: "image_url", image_url: { url: `data:image/jpeg;base64,${imageBase64}` } },
-            ],
+    const responseSchema = normalizeSchemaForGemini(tools[0].function.parameters);
+    const mimeType = inferImageMimeType(imageBase64);
+
+    const response = await fetch(
+      "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent",
+      {
+        method: "POST",
+        headers: {
+          "x-goog-api-key": GEMINI_API_KEY,
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          systemInstruction: {
+            parts: [{ text: systemPrompt }],
           },
-        ],
-        tools,
-        tool_choice: toolChoice,
-      }),
-    });
+          contents: [
+            {
+              role: "user",
+              parts: [
+                { text: "Extraia os dados deste documento e avalie a qualidade da imagem." },
+                {
+                  inlineData: {
+                    mimeType,
+                    data: imageBase64,
+                  },
+                },
+              ],
+            },
+          ],
+          generationConfig: {
+            responseFormat: {
+              text: {
+                mimeType: "application/json",
+                schema: responseSchema,
+              },
+            },
+          },
+        }),
+      },
+    );
 
     if (!response.ok) {
-      if (response.status === 429) {
-        return new Response(JSON.stringify({ error: "Limite de requisições excedido, tente novamente em instantes." }), {
-          status: 429, headers: { ...corsHeaders, "Content-Type": "application/json" },
-        });
-      }
-      if (response.status === 402) {
-        return new Response(JSON.stringify({ error: "Créditos insuficientes." }), {
-          status: 402, headers: { ...corsHeaders, "Content-Type": "application/json" },
-        });
-      }
       const t = await response.text();
-      console.error("AI error:", response.status, t);
+      console.error("Gemini error:", response.status, t);
+
+      if (response.status === 429) {
+        return new Response(
+          JSON.stringify({ error: "Limite de requisições do Gemini excedido. Tente novamente em instantes." }),
+          { status: 429, headers: { ...corsHeaders, "Content-Type": "application/json" } },
+        );
+      }
+
+      if (response.status === 400 || response.status === 403) {
+        return new Response(
+          JSON.stringify({ error: "Gemini recusou a requisição. Verifique a API key e a configuração da API." }),
+          { status: 500, headers: { ...corsHeaders, "Content-Type": "application/json" } },
+        );
+      }
+
       return new Response(JSON.stringify({ error: "Erro no processamento de IA" }), {
-        status: 500, headers: { ...corsHeaders, "Content-Type": "application/json" },
+        status: 500,
+        headers: { ...corsHeaders, "Content-Type": "application/json" },
       });
     }
 
     const result = await response.json();
-    const toolCall = result.choices?.[0]?.message?.tool_calls?.[0];
-    
+    const text = result?.candidates?.[0]?.content?.parts
+      ?.map((part: { text?: string }) => part?.text || "")
+      .join("")
+      .trim();
+
     let extracted: Record<string, unknown> = {};
-    if (toolCall?.function?.arguments) {
+    if (text) {
       try {
-        extracted = JSON.parse(toolCall.function.arguments);
+        extracted = JSON.parse(text);
       } catch {
-        extracted = { erro: "Não foi possível processar a resposta da IA.", score_qualidade: 0, score_confianca: 0 };
+        console.error("Resposta não-JSON do Gemini:", text);
+        extracted = {
+          erro: "Não foi possível processar a resposta da IA.",
+          score_qualidade: 0,
+          score_confianca: 0,
+        };
       }
     } else {
-      extracted = { erro: "IA não retornou dados estruturados.", score_qualidade: 0, score_confianca: 0 };
+      const finishReason = result?.candidates?.[0]?.finishReason;
+      const blockReason = result?.promptFeedback?.blockReason;
+      console.error("Gemini não retornou texto:", { finishReason, blockReason });
+      extracted = {
+        erro: blockReason
+          ? `A análise da imagem foi bloqueada pelo Gemini (${blockReason}).`
+          : "IA não retornou dados estruturados.",
+        score_qualidade: 0,
+        score_confianca: 0,
+      };
     }
 
     return new Response(JSON.stringify(extracted), {
