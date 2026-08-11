@@ -111,7 +111,7 @@ export function PWAInstallPrompt() {
             <X className="h-5 w-5" />
           </button>
           <img
-            src="/pwa-icon-192.png"
+            src="/logo-sistema.png"
             alt="sistema"
             className="w-20 h-20 rounded-2xl mx-auto mb-3 shadow-lg border-2 border-white/20"
           />
