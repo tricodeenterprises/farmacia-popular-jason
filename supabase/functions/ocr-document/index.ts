@@ -19,12 +19,10 @@ function normalizeSchemaForGemini(schema: any): any {
   const out: Record<string, unknown> = {};
 
   for (const [key, value] of Object.entries(schema)) {
-    if (key === "nullable" || key === "additionalProperties") continue;
+    // O schema do generateContent/Gemini 2.5 não precisa de additionalProperties
+    // e pode rejeitar alguns formatos mais amplos de JSON Schema.
+    if (key === "additionalProperties") continue;
     out[key] = normalizeSchemaForGemini(value);
-  }
-
-  if (schema.nullable === true && typeof schema.type === "string") {
-    out.type = [schema.type, "null"];
   }
 
   return out;
@@ -311,12 +309,8 @@ Responda APENAS com JSON válido usando a tool fornecida.`;
             },
           ],
           generationConfig: {
-            responseFormat: {
-              text: {
-                mimeType: "application/json",
-                schema: responseSchema,
-              },
-            },
+            responseMimeType: "application/json",
+            responseSchema,
           },
         }),
       },
